@@ -81,12 +81,12 @@ class AuthCard extends StatefulWidget {
   const AuthCard({Key? key}) : super(key: key);
 
   @override
-  _AuthCardState createState() => _AuthCardState();
+  AuthCardState createState() => AuthCardState();
 }
 
 enum AuthMode { login, signUp }
 
-class _AuthCardState extends State<AuthCard>
+class AuthCardState extends State<AuthCard>
     with SingleTickerProviderStateMixin {
   final GlobalKey<FormState> _form = GlobalKey();
   AuthMode _authMode = AuthMode.login;
@@ -202,26 +202,18 @@ class _AuthCardState extends State<AuthCard>
                 const SizedBox(
                   height: 20,
                 ),
-                if (_isLoading) CircularProgressIndicator(),
-                RaisedButton(
+                if (_isLoading) const CircularProgressIndicator(),
+                ElevatedButton(
                   onPressed: _submit,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(30),
-                  ),
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 30, vertical: 8),
-                  color: Theme.of(context).primaryColor,
-                  textColor:
-                      Theme.of(context).primaryTextTheme.headline6!.color,
-                  child: Text(_authMode == AuthMode.login ? "Login" : "SingUp"),
+                  child: Text(_authMode == AuthMode.login ? "Login" : "SingUp",style: TextStyle(color: Theme.of(context).primaryTextTheme.headline6!.color)),
                 ),
-                FlatButton(
-                  onPressed: _switchAuthMode,
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 30, vertical: 4),
-                  textColor: Theme.of(context).primaryColor,
-                  child: Text(
-                      '${_authMode == AuthMode.login ? "SignUp" : "Login"} INSTEAD'),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 4),
+                  child: TextButton(
+                    onPressed: _switchAuthMode,
+                    child: Text(
+                        '${_authMode == AuthMode.login ? "SignUp" : "Login"} INSTEAD',style: TextStyle(color: Theme.of(context).primaryColor)),
+                  ),
                 ),
               ],
             ),
@@ -307,7 +299,7 @@ class _AuthCardState extends State<AuthCard>
           title: const Text("An Error Occurred"),
           content: Text(errorMessage),
           actions: [
-            FlatButton(
+            TextButton(
                 onPressed: ()=>Navigator.of(ctx).pop(), child: const Text("Okey"))
           ],
         ),

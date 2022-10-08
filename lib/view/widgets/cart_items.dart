@@ -34,8 +34,8 @@ class CartItem extends StatelessWidget {
      title: const Text('Are you Sure ?'),
      content: const Text('Do You want to remove item from Cart'),
      actions: [
-       FlatButton(onPressed: ()=>Navigator.of(context).pop(), child: const Text('No')),
-       FlatButton(onPressed: ()=>Navigator.of(context).pop(true), child: const Text('Yes')),
+       ElevatedButton(onPressed: ()=>Navigator.of(context).pop(), child: const Text('No')),
+       ElevatedButton(onPressed: ()=>Navigator.of(context).pop(true), child: const Text('Yes')),
      ],
    ),);
       },

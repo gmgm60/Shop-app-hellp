@@ -130,7 +130,7 @@ class _EditScreenState extends State<EditScreen> {
             title: const Text("An Error Occurred"),
             content: const Text("SomeThing went Wrong "),
             actions: [
-              FlatButton(
+              TextButton(
                   onPressed: () => Navigator.of(ctx).pop(),
                   child: const Text('Okey'))
             ],

@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
+import 'dart:developer';
 
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
@@ -60,7 +61,7 @@ class Auth with ChangeNotifier {
 
       prefs.setString('userDate', userDate);
     } catch (e) {
-      throw e;
+      rethrow;
     }
   }
 
@@ -73,19 +74,30 @@ class Auth with ChangeNotifier {
   }
 
   Future<bool> tryAutoLogin() async {
+    log("tryAutoLogin");
     final prefs = await SharedPreferences.getInstance();
     if (!prefs.containsKey('userDate')) {
+      log("containsKey('userDate')");
       return false;
     }
-    final Map<String, Object> extractedData = json
-        .decode(prefs.getString('userDate') as String) as Map<String, Object>;
-    final expireDate = DateTime.parse(extractedData['expiryDate'] as String);
-    if (expireDate.isBefore(DateTime.now())) return false;
-    _token = extractedData['token'] as String;
-    _userId = extractedData['userId'] as String;
-    _expireDate = expireDate;
-    notifyListeners();
-    _outoLogout();
+    log("tryAutoLogin 2 ${json.decode(prefs.getString('userDate')!)}");
+
+    try {
+      final Map<String, dynamic> extractedData = json.decode(prefs.getString('userDate')!);
+      log("tryAutoLogin 3");
+      final expireDate = DateTime.parse(extractedData['expiryDate'] as String);
+      log(extractedData.toString());
+      if (expireDate.isBefore(DateTime.now())) return false;
+      _token = extractedData['token'] as String;
+      _userId = extractedData['userId'] as String;
+      _expireDate = expireDate;
+      notifyListeners();
+
+    }catch (e) {
+      log(e.toString(),name: "Exception");
+    }
+   // _autoLogout();
+
     return true;
   }
 
@@ -102,7 +114,7 @@ class Auth with ChangeNotifier {
     prefs.clear();
   }
 
-  void _outoLogout() async {
+  void _autoLogout() async {
     if (_authTimer != null) {
       _authTimer!.cancel();
     }
